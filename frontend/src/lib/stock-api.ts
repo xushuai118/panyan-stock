@@ -22,11 +22,11 @@ export async function searchStocks(keyword: string) {
     const url = "/api/stocks?type=search&keyword=" + encodeURIComponent(keyword);
     const res = await fetch(url);
     const data = await res.json();
-    const items = data?.QueryResult?.[0]?.InstrumentList || [];
+    const items = data?.QuotationCodeTable?.Data || [];
     return items.map((item: any) => ({
       code: item.Code,
-      name: item.ShortName,
-      market: item.Market,
+      name: item.Name,
+      market: item.MarketType,
     }));
   } catch (e) {
     console.error("搜索股票失败:", e);
