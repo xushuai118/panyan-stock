@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>盘研智选 - 方案总览</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    display: flex;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: #F8FAFC;
+    color: #0F172A;
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* 侧边栏导航 */
+  .sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    background: #FFFFFF;
+    border-right: 1px solid #E2E8F0;
+    padding: 24px 0;
+    overflow-y: auto;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+  }
+  .sidebar-title {
+    padding: 0 20px 16px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #2563EB;
+    border-bottom: 1px solid #E2E8F0;
+    margin-bottom: 8px;
+  }
+  .sidebar a {
+    display: block;
+    padding: 6px 20px;
+    color: #475569;
+    text-decoration: none;
+    font-size: 13px;
+    transition: all 0.15s;
+    border-left: 3px solid transparent;
+  }
+  .sidebar a:hover { background: #F1F5F9; color: #2563EB; }
+  .sidebar a.active { background: #EFF6FF; color: #2563EB; border-left-color: #2563EB; font-weight: 600; }
+  .sidebar .l2 { padding-left: 32px; font-size: 12.5px; color: #64748B; }
+  .sidebar .l3 { padding-left: 44px; font-size: 12px; color: #94A3B8; }
+  .sidebar-divider { height: 1px; background: #E2E8F0; margin: 8px 20px; }
+
+  /* 主内容 */
+  .content {
+    flex: 1;
+    padding: 40px 48px 80px;
+    max-width: 900px;
+  }
+  .content h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: #0F172A;
+  }
+  .content h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 36px;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #2563EB;
+    color: #1E293B;
+  }
+  .content h3 {
+    font-size: 17px;
+    font-weight: 600;
+    margin-top: 28px;
+    margin-bottom: 10px;
+    color: #334155;
+  }
+  .content h4 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    color: #475569;
+  }
+  .content p { margin-bottom: 12px; }
+  .content ul, .content ol { margin: 8px 0 12px 20px; }
+  .content li { margin-bottom: 4px; }
+
+  /* 表格 */
+  .content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 20px;
+    font-size: 14px;
+  }
+  .content th {
+    background: #F1F5F9;
+    font-weight: 600;
+    text-align: left;
+    padding: 8px 12px;
+    border: 1px solid #E2E8F0;
+    color: #475569;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .content td {
+    padding: 8px 12px;
+    border: 1px solid #E2E8F0;
+  }
+  .content tr:nth-child(even) td { background: #FAFAFA; }
+
+  /* 代码块 */
+  .content pre {
+    background: #1E293B;
+    color: #E2E8F0;
+    padding: 16px 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.6;
+    margin: 12px 0 20px;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  }
+  .content code {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 13px;
+    background: #F1F5F9;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .content pre code { background: none; padding: 0; }
+
+  /* 特殊标记 */
+  .badge-done { color: #22C55E; }
+  .badge-todo { color: #EF4444; }
+  .badge-warn { background: #FEF2F2; color: #EF4444; padding: 12px 16px; border-radius: 8px; border: 1px solid #FECACA; margin: 12px 0; font-weight: 600; }
+  .badge-info { background: #EFF6FF; color: #2563EB; padding: 12px 16px; border-radius: 8px; border: 1px solid #BFDBFE; margin: 12px 0; }
+  .badge-stop { background: #F0FDF4; color: #22C55E; padding: 12px 16px; border-radius: 8px; border: 1px solid #BBF7D0; margin: 12px 0; font-weight: 600; }
+
+  /* 高亮标记 */
+  .hl { background: #FEF9C3; padding: 2px 4px; border-radius: 3px; }
+
+  hr { border: none; border-top: 1px solid #E2E8F0; margin: 28px 0; }
+
+  /* 响应式 */
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .content { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 侧边栏 -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-title">📊 盘研智选</div>
+  <a href="#tech" class="active">技术路线</a>
+  <a href="#done" class="l2">已完成工作</a>
+  <a href="#分工" class="l2">分工方案</a>
+  <div class="sidebar-divider"></div>
+  <a href="#solution">V2 完整方案</a>
+  <a href="#supabase" class="l2">Supabase 表结构</a>
+  <a href="#api-fields" class="l2">API 字段映射</a>
+  <a href="#pages" class="l2">前端页面设计</a>
+  <a href="#验收" class="l2">验收标准</a>
+  <div class="sidebar-divider"></div>
+  <a href="#rules">⚠️ 执行守则</a>
+  <div class="sidebar-divider"></div>
+  <a href="#step1">第一步：修 Bug</a>
+  <a href="#fixA" class="l3">改点 A — getMarketIndices</a>
+  <a href="#fixB" class="l3">改点 B — getStockQuote</a>
+  <a href="#fixC" class="l3">改点 C — 字段引用</a>
+  <div class="sidebar-divider"></div>
+  <a href="#step2">第二步：加自选按钮</a>
+  <a href="#fixD" class="l3">改点 D — import</a>
+  <a href="#fixE" class="l3">改点 E — addToWatchlist</a>
+  <a href="#fixF" class="l3">改点 F — 模板按钮</a>
+  <div class="sidebar-divider"></div>
+  <a href="#dev-req">开发要求</a>
+</div>
+
+<!-- 主内容 -->
+<div class="content">
+
+<h1>盘研智选 — CodeX 开发指令（V2 免费路线）</h1>
+
+<h2 id="tech">技术路线 <span style="font-size: 13px; font-weight: 400; color: #EF4444;">（已确定，不要改）</span></h2>
+<ul>
+  <li><strong>前端：</strong>Next.js（已有框架，保持不变）</li>
+  <li><strong>部署：</strong>Vercel（免费，Next.js原生支持）</li>
+  <li><strong>数据库：</strong>Supabase（免费，PostgreSQL，用户数据存这里）</li>
+  <li><strong>行情数据：</strong>免费公开API直连（不经过后端）
+    <ul>
+      <li>A股：东方财富免费接口</li>
+      <li>港股：新浪财经免费接口</li>
+      <li>美股：TwelveData免费key</li>
+      <li>AI分析：DeepSeek API（用户自己的key）</li>
+    </ul>
+  </li>
+  <li>❌ 不要Flask后端，不要Docker，不要Redis</li>
+</ul>
+
+<h3 id="done">当前已完成的工作</h3>
+<ul>
+  <li>✅ Next.js前端项目框架已搭好</li>
+  <li>✅ 页面目录已创建</li>
+  <li>✅ Flask后端代码已写了（但不用了）</li>
+  <li>❌ docker-compose.yml、backend/ 目录可以删掉</li>
+  <li>❌ 需要改造现有前端页面，把调后端的接口换成调Supabase</li>
+</ul>
+
+<h2 id="分工">分工方案 <span style="font-size: 13px; font-weight: 400; color: #EF4444;">（禁止越界）</span></h2>
+<table>
+  <tr><th>角色</th><th>职责</th><th>不准做</th></tr>
+  <tr><td><strong>锐策（我）</strong></td><td>出方案、设计表结构、写验收标准、review代码、写精确执行指令</td><td>不改前端文件</td></tr>
+  <tr><td><strong>CodeX（你）</strong></td><td>按本 prompt 的逐行精确指令机械执行代码修改</td><td>不改方案、不改数据结构、不准跳过步骤</td></tr>
+  <tr><td><strong>麦子（老板）</strong></td><td>提需求、定优先级、确认上线</td><td>不需要盯代码</td></tr>
+</table>
+
+<hr>
+
+<h2 id="solution">V2 完整解决方案</h2>
+<p style="color: #94A3B8; font-size: 14px;">方案参考，执行时按下方步骤</p>
+
+<h3 id="supabase">Supabase 表结构 <span style="font-size: 13px; font-weight: 400; color: #EF4444;">（等修复 review 通过后再创建）</span></h3>
+<pre><code>-- 1. 自选股表
+CREATE TABLE watchlists (
+  id BIGSERIAL PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES auth.users(id),
+  stock_code VARCHAR(10) NOT NULL,
+  stock_name VARCHAR(50) NOT NULL,
+  added_at TIMESTAMPTZ DEFAULT NOW(),
+  notes TEXT,
+  UNIQUE(user_id, stock_code)
+);
+ALTER TABLE watchlists ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "用户只能看自己的自选" ON watchlists
+  FOR ALL USING (auth.uid() = user_id);
+
+-- 2. 持仓记录表（手动录入）
+CREATE TABLE portfolios (
+  id BIGSERIAL PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES auth.users(id),
+  stock_code VARCHAR(10) NOT NULL,
+  stock_name VARCHAR(50) NOT NULL,
+  shares DECIMAL(12,2) NOT NULL,
+  avg_cost DECIMAL(10,2) NOT NULL,
+  added_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(user_id, stock_code)
+);
+ALTER TABLE portfolios ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "用户只能看自己的持仓" ON portfolios
+  FOR ALL USING (auth.uid() = user_id);</code></pre>
+
+<h3 id="api-fields">东方财富 API 字段映射 <span style="font-size: 13px; font-weight: 400; color: #EF4444;">（对照确认，不准猜）</span></h3>
+
+<h4>行情接口 <code>push2.eastmoney.com/api/qt/stock/get</code></h4>
+<table>
+  <tr><th>字段</th><th>含义</th><th>类型</th></tr>
+  <tr><td>f2</td><td>最新价</td><td>number</td></tr>
+  <tr><td>f3</td><td>涨跌幅 %</td><td>number</td></tr>
+  <tr><td>f4</td><td>涨跌额</td><td>number</td></tr>
+  <tr><td>f5</td><td>成交量（手）</td><td>number</td></tr>
+  <tr><td>f6</td><td>成交额</td><td>number</td></tr>
+  <tr><td>f7</td><td>今开</td><td>number</td></tr>
+  <tr><td>f8</td><td>最高</td><td>number</td></tr>
+  <tr><td>f9</td><td>最低</td><td>number</td></tr>
+  <tr><td>f10</td><td>昨收</td><td>number</td></tr>
+  <tr><td><strong>f12</strong></td><td><strong>股票代码</strong></td><td>string</td></tr>
+  <tr><td><strong>f14</strong></td><td><strong>股票名称</strong></td><td>string</td></tr>
+  <tr><td>f17</td><td>总市值</td><td>number</td></tr>
+  <tr><td>f18</td><td>流通市值</td><td>number</td></tr>
+  <tr><td>f19</td><td>PE（动）</td><td>number</td></tr>
+  <tr><td>f25</td><td>换手率 %</td><td>number</td></tr>
+</table>
+
+<h4>指数行情 <code>push2.eastmoney.com/api/qt/ulist.np/get</code></h4>
+<table>
+  <tr><th>字段</th><th>含义</th></tr>
+  <tr><td><strong>f12</strong></td><td><strong>代码</strong>（如 1.000001）</td></tr>
+  <tr><td><strong>f14</strong></td><td><strong>名称</strong></td></tr>
+  <tr><td>f2</td><td>最新点数</td></tr>
+  <tr><td>f3</td><td>涨跌幅 %</td></tr>
+  <tr><td>f4</td><td>涨跌点</td></tr>
+</table>
+
+<h4>搜索接口 <code>searchadapter.eastmoney.com/api/suggest/get</code></h4>
+<table>
+  <tr><th>路径</th><th>含义</th></tr>
+  <tr><td>QueryResult[0].InstrumentList[0].Code</td><td>股票代码</td></tr>
+  <tr><td>QueryResult[0].InstrumentList[0].ShortName</td><td>股票名称</td></tr>
+  <tr><td>QueryResult[0].InstrumentList[0].Market</td><td>市场类型</td></tr>
+</table>
+
+<h3 id="pages">前端页面详细设计</h3>
+
+<h4>页面 1 — 首页（搜索+筛选）</h4>
+<ul>
+  <li>顶部：指数行情横向滚动条（6个A股指数）</li>
+  <li>Tab 切换：<code>股票搜索</code> / <code>选股筛选</code></li>
+  <li>搜索面板：输入框 + 搜索按钮 → 结果列表（代码+名称+操作按钮）</li>
+  <li>筛选面板：PE区间/市值/行业 四个筛选条件 + 开始筛选按钮 → 结果列表（含价格、涨跌幅）</li>
+  <li>每条结果可点击进入详情页、可加入自选</li>
+</ul>
+
+<h4>页面 2 — 个股详情 <code>/stock/[code]</code></h4>
+<ul>
+  <li>顶部：股票名称/代码 + 当前价格 + 涨跌幅</li>
+  <li>指标卡：开盘/最高/最低/成交量</li>
+  <li>财务指标区：PE / 总市值 / 换手率（数据来自东方财富行情接口）</li>
+  <li>加自选按钮</li>
+</ul>
+
+<h3 id="验收">验收标准</h3>
+<table>
+  <tr><th>功能</th><th>验收条件</th></tr>
+  <tr><td>Bug 修复</td><td><code>npm run build</code> 编译通过，搜索显示正常，PE 显示正确数字</td></tr>
+  <tr><td>搜索</td><td>输入"茅台"能搜到贵州茅台，点击"查看详情"跳转正常</td></tr>
+  <tr><td>个股详情</td><td>打开 <code>/stock/600519</code> 显示价格/涨跌幅/PE/市值</td></tr>
+  <tr><td>自选股</td><td>点击"+ 自选"后，数据实际插入 Supabase watchlists 表，alert 去掉</td></tr>
+  <tr><td>筛选</td><td>点击"开始筛选"调用真实数据（不返回 mock）</td></tr>
+</table>
+
+<hr>
+
+<h2 id="rules">⚠️ 执行守则（必须逐条遵守）</h2>
+
+<div class="badge-info">
+<strong>守则1：每步做完必须 STOP</strong><br>
+每一步末尾标注了 <code>⏸️ STOP</code>，做完该步后<strong>立即停止</strong>，不往下做，不等指令，等锐策 review 通过后再继续。
+</div>
+
+<div class="badge-info">
+<strong>守则2：只改本步骤指定的文件</strong><br>
+不准顺手修其他文件，不准做"顺便优化"。改完立刻用下方验证命令确认。
+</div>
+
+<div class="badge-info">
+<strong>守则3：精确执行，不议价</strong><br>
+变更指令中的代码是最终答案。不需要你判断"要不要这样改"，直接替换。不需要你理解东方财富 API 结构，按指定的字段名写。
+</div>
+
+<div class="badge-info">
+<strong>守则4：验证命令必须跑，看输出</strong><br>
+每个变更下方有 <code>sed</code> 或 <code>grep</code> 验证命令。跑完之后确认输出匹配预期值，不匹配就是没改对。
+</div>
+
+<hr>
+
+<h2 id="step1">第一步：修 Bug（精确变更，逐行可验证）</h2>
+
+<blockquote class="badge-info"><strong>影响文件：</strong> <code>frontend/src/lib/stock-api.ts</code></blockquote>
+
+<h3 id="fixA">改点 A — getMarketIndices（第 8-9 行）</h3>
+
+<p><strong>旧代码：</strong></p>
+<pre><code>code: item.f14,   // 错误
+name: item.f12,   // 错误</code></pre>
+
+<p><strong>新代码：</strong></p>
+<pre><code>code: item.f12,   // f12 = 股票代码
+name: item.f14,   // f14 = 股票名称</code></pre>
+
+<div class="badge-done" style="background: #F0FDF4; padding: 8px 12px; border-radius: 6px; border: 1px solid #BBF7D0;">
+✅ <strong>验证：</strong> 运行 <code>sed -n '7,10p' frontend/src/lib/stock-api.ts</code><br>
+期望看到第 8 行有 <code>code: item.f12</code>，第 9 行有 <code>name: item.f14</code>
+</div>
+
+<h3 id="fixB">改点 B — getStockQuote（第 41 行）</h3>
+
+<p><strong>旧代码：</strong></p>
+<pre><code>const item = data.data;</code></pre>
+
+<p><strong>新代码：</strong></p>
+<pre><code>const raw = data.data?.data;
+// 注意：东方财富 stock/get 返回 { rc, data: { f2, f3, ... } }
+// API route 透传为 { code: 0, data: { rc, data: { f2, ... } } }
+// 所以 data.data 拿到 { rc, data: { f2, ... } }
+// data.data?.data 才拿到 { f2, f3, ... }
+// 变量改名 raw，避免和旧 item 混淆</code></pre>
+
+<h3 id="fixC">改点 C — getStockQuote 余下所有字段引用（第 43-59 行）</h3>
+
+<p><strong>所有 <code>item.fXX</code> 改为 <code>raw.fXX</code></strong></p>
+
+<table>
+  <tr><th>旧</th><th>新</th></tr>
+  <tr><td><code>code: item.f14,</code></td><td><code>code: raw.f12,</code></td></tr>
+  <tr><td><code>name: item.f12,</code></td><td><code>name: raw.f14,</code></td></tr>
+  <tr><td><code>price: item.f2,</code></td><td><code>price: raw.f2,</code></td></tr>
+  <tr><td><code>changePct: item.f3,</code></td><td><code>changePct: raw.f3,</code></td></tr>
+  <tr><td><code>change: item.f4,</code></td><td><code>change: raw.f4,</code></td></tr>
+  <tr><td><code>volume: item.f5,</code></td><td><code>volume: raw.f5,</code></td></tr>
+  <tr><td><code>amount: item.f6,</code></td><td><code>amount: raw.f6,</code></td></tr>
+  <tr><td><code>open: item.f7,</code></td><td><code>open: raw.f7,</code></td></tr>
+  <tr><td><code>high: item.f8,</code></td><td><code>high: raw.f8,</code></td></tr>
+  <tr><td><code>low: item.f9,</code></td><td><code>low: raw.f9,</code></td></tr>
+  <tr><td><code>prevClose: item.f10,</code></td><td><code>prevClose: raw.f10,</code></td></tr>
+  <tr><td><code>turnoverRate: item.f25,</code></td><td><code>turnoverRate: raw.f25,</code></td></tr>
+  <tr><td><code>pe: item.f19,</code></td><td><code>pe: raw.f19,</code></td></tr>
+  <tr><td><code>marketCap: item.f17,</code></td><td><code>marketCap: raw.f17,</code></td></tr>
+  <tr><td><code>circMarketCap: item.f18,</code></td><td><code>circMarketCap: raw.f18,</code></td></tr>
+</table>
+
+<div class="badge-done" style="background: #F0FDF4; padding: 8px 12px; border-radius: 6px; border: 1px solid #BBF7D0;">
+✅ <strong>验证：</strong> 运行 <code>sed -n '38,60p' frontend/src/lib/stock-api.ts</code><br>
+期望：第 41 行是 <code>const raw = data.data?.data;</code>，且没有任何 <code>item.f</code> 出现
+</div>
+
+<h4>最终验证</h4>
+<pre><code>cd frontend && npm run build</code></pre>
+<p>期望：编译零错误通过</p>
+
+<div class="badge-stop">
+⏸️ <strong>STOP。</strong> 不要做下面的步骤。等锐策 review 通过后再继续。
+</div>
+
+<hr>
+
+<h2 id="step2">第二步：个股详情页加「加自选」按钮 <span style="font-size: 13px; font-weight: 400; color: #EF4444;">（先不要做，等第一步 review 通过）</span></h2>
+
+<blockquote class="badge-info"><strong>影响文件：</strong> <code>frontend/src/app/stock/[code]/page.tsx</code></blockquote>
+
+<h3 id="fixD">改点 D — 加入 supabase import</h3>
+
+<p>在 <code>import { getStockQuote } from '@/lib/stock-api';</code> 行下方插入：</p>
+<pre><code>import { supabase } from '@/lib/supabase';</code></pre>
+
+<h3 id="fixE">改点 E — 加入 addToWatchlist 函数</h3>
+
+<p>在 StockDetailPage 组件的 <code>return (</code> 语句之前插入：</p>
+<pre><code>const addToWatchlist = async () => {
+  if (!stock) return;
+  const { error } = await supabase.from('watchlists').insert({
+    stock_code: stock.code,
+    stock_name: stock.name,
+  });
+  if (error) {
+    alert('添加失败：' + error.message);
+  } else {
+    alert('已添加到自选股');
+  }
+};</code></pre>
+
+<h3 id="fixF">改点 F — 在模板中加入按钮</h3>
+
+<p>在 <code>&lt;h1&gt;</code> 所在行的 children 中，<code>{stock.name}</code> 之后插入：</p>
+<pre><code>&lt;button onClick={addToWatchlist} className="ml-3 text-sm text-blue-600 border border-blue-600 rounded px-2 py-1 hover:bg-blue-50"&gt;+ 自选&lt;/button&gt;</code></pre>
+
+<div class="badge-done" style="background: #F0FDF4; padding: 8px 12px; border-radius: 6px; border: 1px solid #BBF7D0;">
+✅ <strong>验证：</strong> 运行 <code>grep -n 'addToWatchlist\|supabase\|自选' frontend/src/app/stock/\[code\]/page.tsx</code><br>
+期望：找到 3 处相关代码
+</div>
+
+<div class="badge-stop">
+⏸️ <strong>STOP。</strong> 等锐策 review。
+</div>
+
+<hr>
+
+<h2 id="dev-req">开发要求</h2>
+<ol>
+  <li>先删掉不需要的后端代码（backend/、docker-compose.yml）</li>
+  <li>所有API调用改成从浏览器直接请求公开接口</li>
+  <li>用户数据（自选股、持仓）通过Supabase SDK存取</li>
+  <li>API key放环境变量，不要硬编码</li>
+  <li>中文界面，移动端适配</li>
+  <li>只写前端代码，不涉及后端</li>
+  <li>所有调后端的代码用注释 <code>TODO: 对接Supabase</code> 标记</li>
+</ol>
+
+</div>
+
+<script>
+// 滚动高亮导航
+const sections = document.querySelectorAll('[id]');
+const links = document.querySelectorAll('.sidebar a');
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+      const match = document.querySelector(`.sidebar a[href="#${entry.target.id}"]`);
+      if (match) match.classList.add('active');
+    }
+  });
+}, { rootMargin: '-80px 0px -60% 0px' });
+
+sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>

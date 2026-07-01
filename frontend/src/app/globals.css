@@ -1,0 +1,37 @@
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 248, 250, 252;
+  --background-end-rgb: 255, 255, 255;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-hover transition-colors;
+  }
+  
+  .card {
+    @apply bg-bg-card rounded-xl shadow-card p-4;
+  }
+  
+  .table-header {
+    @apply bg-gray-100 text-content-2 text-xs uppercase font-medium;
+  }
+  
+  .table-cell {
+    @apply px-4 py-3 text-sm text-content-1;
+  }
+}
