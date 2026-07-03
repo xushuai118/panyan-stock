@@ -1,12 +1,10 @@
 ﻿'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { getMarketIndices, searchStocks } from '@/lib/stock-api';
+import { getMarketIndices, searchStocks, getStockQuote } from '@/lib/stock-api';
 import { supabase } from '@/lib/supabase';
 
 export default function Home() {
-  const router = useRouter();
   const [keyword, setKeyword] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [indices, setIndices] = useState<any[]>([]);
@@ -18,6 +16,10 @@ export default function Home() {
   const [minMarketCap, setMinMarketCap] = useState('');
   const [industry, setIndustry] = useState('');
   const [screenResults, setScreenResults] = useState<any[]>([]);
+
+  const [selectedStock, setSelectedStock] = useState<any>(null);
+  const [quote, setQuote] = useState<any>(null);
+  const [quoteLoading, setQuoteLoading] = useState(false);
 
   useEffect(() => { getMarketIndices().then(setIndices); }, []);
 
@@ -69,7 +71,17 @@ export default function Home() {
     setLoading(false);
   };
 
-  const goToStock = (code: string) => { router.push('/stock/' + code); };
+  const openStockDetail = async (stock: any) => {
+    setSelectedStock(stock);
+    setQuoteLoading(true);
+    setQuote(await getStockQuote(stock.code));
+    setQuoteLoading(false);
+  };
+
+  const closeModal = () => {
+    setSelectedStock(null);
+    setQuote(null);
+  };
 
   const addToWatchlist = async (stock: any) => {
     const { error } = await supabase.from('watchlists').insert({
@@ -121,7 +133,7 @@ export default function Home() {
                   <div key={stock.code} className="flex items-center justify-between p-3 border border-border rounded-lg hover:bg-gray-50">
                     <div><span className="font-medium">{stock.name}</span><span className="text-content-3 text-sm ml-2">{stock.code}</span></div>
                     <div className="flex gap-2">
-                      <button onClick={() => goToStock(stock.code)} className="text-primary text-sm">查看详情</button>
+                      <button onClick={() => openStockDetail(stock)} className="text-primary text-sm">查看详情</button>
                       <button onClick={() => addToWatchlist(stock)} className="text-ai-primary text-sm">+ 自选</button>
                     </div>
                   </div>
@@ -143,7 +155,7 @@ export default function Home() {
             {screenResults.length > 0 && (
               <div className="mt-6 space-y-2">
                 {screenResults.map((stock) => (
-                  <div key={stock.code} className="flex items-center justify-between p-3 border border-border rounded-lg hover:bg-gray-50 cursor-pointer" onClick={() => goToStock(stock.code)}>
+                  <div key={stock.code} className="flex items-center justify-between p-3 border border-border rounded-lg hover:bg-gray-50 cursor-pointer" onClick={() => openStockDetail(stock)}>
                     <div><span className="font-medium">{stock.name}</span><span className="text-content-3 text-sm ml-2">{stock.code}</span></div>
                     <div className="text-right"><p className="font-mono">{stock.price}</p><p className={'text-sm ' + getChangeClass(stock.changePct)}>{stock.changePct >= 0 ? '+' : ''}{stock.changePct}%</p></div>
                   </div>
@@ -153,6 +165,74 @@ export default function Home() {
           </div>
         )}
       </div>
+
+      {selectedStock && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={closeModal}>
+          <div className="bg-white rounded-xl shadow-card max-w-2xl w-full mx-4 p-6" onClick={(e) => e.stopPropagation()}>
+            <div className="flex justify-between items-center mb-4">
+              <div>
+                <h3 className="text-xl font-bold">{selectedStock.name}</h3>
+                <p className="text-content-3 text-sm">{selectedStock.code}</p>
+              </div>
+              <button onClick={closeModal} className="text-content-3 hover:text-content-1 text-2xl">&times;</button>
+            </div>
+            {quoteLoading ? (
+              <p className="text-content-2">加载中...</p>
+            ) : quote ? (
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-content-2">最新价</span>
+                  <span className={'font-mono font-bold ' + getChangeClass(quote.changePct)}>{quote.price}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-content-2">涨跌幅</span>
+                  <span className={getChangeClass(quote.changePct)}>
+                    {Number(quote.changePct) >= 0 ? '+' : ''}{quote.changePct}%
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-content-2">涨跌额</span>
+                  <span className={getChangeClass(quote.change)}>{quote.change}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-content-2">开盘价</span>
+                  <span className="font-mono">{quote.open}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-content-2">最高价</span>
+                  <span className="font-mono">{quote.high}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-content-2">最低价</span>
+                  <span className="font-mono">{quote.low}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-content-2">昨收</span>
+                  <span className="font-mono">{quote.prevClose}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-content-2">成交量</span>
+                  <span className="font-mono">{quote.volume}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-content-2">成交额</span>
+                  <span className="font-mono">{quote.amount}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-content-2">市盈率</span>
+                  <span className="font-mono">{quote.pe}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-content-2">总市值</span>
+                  <span className="font-mono">{quote.marketCap}</span>
+                </div>
+              </div>
+            ) : (
+              <p className="text-content-2">暂无行情数据</p>
+            )}
+          </div>
+        </div>
+      )}
     </main>
   );
 }

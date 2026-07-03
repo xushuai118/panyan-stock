@@ -4,7 +4,7 @@ const API_PATH = '/api/stocks';
 
 export async function getMarketIndices() {
   try {
-    const res = await fetch(API_PATH + '?type=indices', { signal: AbortSignal.timeout(15000) });
+    const res = await fetch(API_PATH + '?type=indices');
     const data = await res.json();
     return (data.data?.diff || []).map((item: any) => ({
       code: item.f12,
@@ -21,7 +21,7 @@ export async function getMarketIndices() {
 export async function searchStocks(keyword: string) {
   try {
     const url = API_PATH + '?type=search&keyword=' + encodeURIComponent(keyword);
-    const res = await fetch(url, { signal: AbortSignal.timeout(15000) });
+    const res = await fetch(url);
     const data = await res.json();
     const items = data?.QuotationCodeTable?.Data || [];
     return items.map((item: any) => ({
@@ -38,7 +38,7 @@ export async function searchStocks(keyword: string) {
 export async function getStockQuote(code: string) {
   try {
     const url = API_PATH + '?type=quote&code=' + code;
-    const res = await fetch(url, { signal: AbortSignal.timeout(15000) });
+    const res = await fetch(url);
     const data = await res.json();
     const raw = data.data?.data;
     if (!raw) return null;
