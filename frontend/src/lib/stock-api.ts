@@ -1,8 +1,10 @@
-﻿// 股票数据 API 调用（通过 Next.js API Route 代理，避免 CORS）
+﻿// 股票数据 API 调用（通过 SCF 云函数代理东方财富 API）
+
+const SCF_BASE = process.env.NEXT_PUBLIC_SCF_URL || 'http://localhost:9000';
 
 export async function getMarketIndices() {
   try {
-    const res = await fetch("/api/stocks?type=indices");
+    const res = await fetch(SCF_BASE + '/stocks?type=indices');
     const data = await res.json();
     return (data.data?.diff || []).map((item: any) => ({
       code: item.f12,
@@ -18,8 +20,7 @@ export async function getMarketIndices() {
 
 export async function searchStocks(keyword: string) {
   try {
-
-    const url = "/api/stocks?type=search&keyword=" + encodeURIComponent(keyword);
+    const url = SCF_BASE + '/stocks?type=search&keyword=' + encodeURIComponent(keyword);
     const res = await fetch(url);
     const data = await res.json();
     const items = data?.QuotationCodeTable?.Data || [];
@@ -36,7 +37,7 @@ export async function searchStocks(keyword: string) {
 
 export async function getStockQuote(code: string) {
   try {
-    const url = "/api/stocks?type=quote&code=" + code;
+    const url = SCF_BASE + '/stocks?type=quote&code=' + code;
     const res = await fetch(url);
     const data = await res.json();
     const raw = data.data?.data;
